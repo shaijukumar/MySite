@@ -1,0 +1,42 @@
+﻿@model MySite.Models.SiteImages
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>SiteImages</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ContentDataId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ContentDataId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Image_url)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Image_url)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.SiteImagesId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

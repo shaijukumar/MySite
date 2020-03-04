@@ -1,0 +1,23 @@
+﻿Install-Package EntityFramework –IncludePrerelease 
+
+enable-migrations 
+Create Model: 
+
+add-migration InitialModel 
+update-database 
+=================================
+add-migration db5 –force 
+update-database 
+
+====================
+
+http://localhost:49962/
+
+http://localhost:49962/
+http://localhost:49962/
+http://localhost:49962/p/w1
+
+SiteConfig:
+http://localhost:49962/SiteConfigs/Create
+
+http://localhost:49962/ContentDatas/Create

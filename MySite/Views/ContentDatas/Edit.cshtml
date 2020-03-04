@@ -1,0 +1,221 @@
+﻿@model MySite.Models.ContentData
+
+@{
+    ViewBag.Title = "Edit ContentData";
+}
+
+
+
+<script src="~/Scripts/ckeditor/ckeditor.js"></script>
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script src="~/Scripts/clipboard.min.js"></script>
+
+<script type="text/javascript">
+
+
+    $(function () {
+
+        $('.btnSubmit').click(function () {
+
+            debugger;
+
+            var ContentDataId = window.location.href.split("/")[5]; // $("#ContentDataId").val();
+
+            var CategoryId = $("#CategoryId").val();
+            var Title = $("#Title").val();
+            var URLString = $("#URLString").val();
+            var Content = CKEDITOR.instances['ContentCKEdit'].getData();
+            debugger;
+
+            if (Content) {
+                Content = $('<div/>').text(Content).html()
+            }
+            debugger;
+            var data = new FormData();
+            data.append("ContentDataId", ContentDataId);
+            data.append("CategoryId", CategoryId);
+            data.append("Title", Title);
+            data.append("URLString", URLString);
+            data.append("Content", Content);
+
+
+            // Make Ajax request with the contentType = false, and procesDate = false
+            var ajaxRequest = $.ajax({
+                type: "POST",
+                url: "/api/CreateContent",
+                contentType: false,
+                processData: false,
+                data: data,
+                success: function (result) {
+                    if (result.Success) {
+                        alert(result.Message);
+                    }
+                    else {
+                        alert(result.Message);
+                    }
+
+                },
+                error: function (err) {
+                    alert(JSON.stringify(err));
+                }
+            });
+
+
+        });
+
+    });
+
+</script>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Edit Content Data</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ContentDataId)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CategoryId, "CategoryId", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("CategoryId", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.URLString, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.URLString, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.URLString, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @*@Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })*@
+        <div class="col-md-12">
+            @*@Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control", @placeholder = "ContentCKEdit", @id = "ContentCKEdit" } })*@
+            @Html.TextAreaFor(model => model.Content, new { @class = "form-control", @placeholder = "ContentCKEdit", @id = "ContentCKEdit" })
+            @Html.ValidationMessageFor(model => model.Content, "", new { @class  
+            <script>
+                CKEDITOR.replace("ContentCKEdit");                
+            </script>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            @*<input type="submit" value="Save" class="btn btn-default" />*@
+            <input type="button" class="customPurple btnSubmit" id="btnSubmit" value="SUBMIT">
+        </div>
+    </div>
+    <button ype="button" class="btn btn-link" data-clipboard-text="Just because you can doesn't mean you should — clipboard.js">
+        Copy to clipboard
+    </button>
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <table class="table table-striped"
+                   ng-app="ImageListApp" ng-controller="ImageListController" ng-init="init()">
+                <tbody>
+                    <tr ng-repeat="img in ImageList">
+                        <td style="width:20%">
+                            <button type="button" class="btn btn-link" ng-click="CopyImage($index)" >Copy</button>
+                        </td>
+                        <td style="width:30%">
+                            <img class="caption" id="user_img" height="50" width="50" src="/Img/{{img.Image_url}}" />
+                        </td>
+                        <td style="width:25%">{{img.Name}}</td>
+                        <td style="width:25%">
+                            <div id="ImgURL{{$index}}">/Img/{{img.Image_url}}</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+           
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        var App = angular.module("ImageListApp", []);
+
+        App.controller("ImageListController", function ($scope, $http) {
+
+            $scope.init = function () {
+                UpdateImageList();
+            }
+
+            $scope.ShowImages = function () {
+                UpdateImageList();
+            }
+
+            $scope.CopyImage = function (id) {
+                debugger;
+                //var id = $(this).attr( "ImgURL" +  id);
+		        var el = document.getElementById("ImgURL" +  id);
+		        var range = document.createRange();
+		        range.selectNodeContents(el);
+		        var sel = window.getSelection();
+		        sel.removeAllRanges();
+		        sel.addRange(range);
+		        document.execCommand('copy');
+		       
+            }
+
+            function UpdateImageList() {               
+            $http.get("/SiteImages/ImageList?ContentDataId=@Html.Raw( Model.ContentDataId)" )
+            .then(function (data) {
+                $scope.ImageList = angular.fromJson(data.data);
+                }, function (response) { console.log("Error" + response) });
+            }
+        });
+    </script>
+}
+
+<script src="~/Scripts/angular.js"></script>
+<script src="~/Scripts/Angular/ImageList.js"></script>
+
+<style type="text/css">
+    .divTable {
+        display: table;
+        width: auto;
+        background-color: #eee;
+        border: 1px solid #666666;
+        border-spacing: 5px; /*cellspacing:poor IE support for  this*/
+        /* border-collapse:separate;*/
+    }
+
+    .divRow {
+        display: table-row;
+        width: auto;       
+    }
+
+    .divCell {
+        float: left; /*fix for  buggy browsers*/
+        display: table-column;
+        width: 200px;
+        
+        
+    }
+</style>

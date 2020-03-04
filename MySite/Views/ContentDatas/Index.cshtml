@@ -1,0 +1,57 @@
+﻿@model IEnumerable<MySite.Models.ContentData>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>        
+        <th>
+            @Html.DisplayNameFor(model => model.ContentDataId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Category.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.URLString)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.Content)
+        </th>*@
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>    
+    <td>
+        @Html.DisplayFor(modelItem => item.ContentDataId)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Category.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Title)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.URLString)
+    </td>
+    @*<td>
+            @Html.DisplayFor(modelItem => item.Content)
+        </td>*@
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.ContentDataId }) |
+        @Html.ActionLink("Details", "Details", new { id = item.ContentDataId }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.ContentDataId })
+    </td>
+</tr>
+}
+
+</table>
